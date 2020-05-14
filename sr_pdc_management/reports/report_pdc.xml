@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--<report-->
+        <!--id="sr_pdc_report_action"-->
+        <!--string="Post Dated Cheques Report"-->
+        <!--model="sr.pdc.payment"-->
+        <!--report_type="qweb-pdf"-->
+        <!--file="sr_pdc_management.pdc_report_template"-->
+        <!--name="sr_pdc_management.pdc_report_template"-->
+        <!--/>-->
+        <report
+                id="sr_pdc_report_action"
+                string="Post Dated Cheques Report"
+                model="pdc.report.wizard"
+                report_type="qweb-pdf"
+                file="sr_pdc_management.pdc_report_template"
+                name="sr_pdc_management.pdc_report_template"
+                menu="False"
+        />
+
+        <report
+                id="action_report_receiptvoucher"
+                name="sr_pdc_management.report_receiptvoucher"
+                model="sr.pdc.payment"
+                string="Receipt Voucher"
+                file="sr_pdc_management.report_receiptvoucher"
+                report_type="qweb-pdf"
+        />
+
+    </data>
+</odoo>
