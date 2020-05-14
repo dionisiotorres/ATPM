@@ -1,0 +1,61 @@
+<odoo>
+    <data>
+        <record id="email_template_reminder_payment" model="mail.template">
+            <field name="name">Payment Reminder - Send by Email</field>
+            <field name="model_id" ref="sr_pdc_management.model_sr_pdc_payment"/>
+            <field name="subject">Checks to be submitted tomorrow</field>
+            <field name="email_from">${object.user_id.email}</field>
+            <field name="email_to">${object.partner_id.email}</field>
+            <field name="body_html"><![CDATA[
+            <style>
+                .border-right-bottom{
+                    border-right:   1px solid black;
+                    border-bottom:  1px solid black;
+                }
+            </style>
+            <p>These checks have to be submitted tomorrow according to there due dates.</p>
+            <p><b>Regards,</b><br/>
+            <b><i>${object.get_user()}</i></b>
+            </p>
+            <table class="table table-striped" style="width:40% !important;border:1px solid black;">
+                <thead class="thead-light">
+                    <td scope="col" class="border-right-bottom"><b>Cheque Number</b></td>
+                    <td scope="col" class="border-right-bottom"><b>Customer</b></td>
+                    <td scope="col" style="border-bottom:1px solid black;"><b>Amount</b></td>
+                </thead>
+                <tbody>
+                    % for record in object.get_payment_history():
+                        <tr>
+                            <td class="border-right-bottom">${record.cheque_ref}</td>
+                            <td class="border-right-bottom">${record.partner_id.name}</td>
+                            <td style="border-bottom:1px solid black;text-align:right;">${'{} {:.2f}'.format(object.get_currency_symbol(), record.amount)}</td>
+                        </tr>
+                    % endfor
+                    <tr>
+                        <td colspan="2" style="border-right:1px solid black;text-align:right;"><b>Total Amount OverDue</b></td>
+                        <td style="text-align:right;">
+                            ${'{} {:.2f}'.format(object.get_currency_symbol(), sum(object.get_payment_history().mapped('amount')))}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            ]]>
+            </field>
+        </record>
+
+        <record model="ir.cron" id="ir_cron_mail_reminder_payment">
+            <field name="name">Mail: Payment Reminder</field>
+            <field name="priority" eval="2"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="numbercall">-1</field>
+            <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 03:00:00')"/>
+            <field name="doall">1</field>
+            <field name="state">code</field>
+            <field name="model_id" ref="model_sr_pdc_payment"/>
+            <field name="code">model._cron_send_payment_history()</field>
+        </record>
+
+    </data>
+</odoo>
