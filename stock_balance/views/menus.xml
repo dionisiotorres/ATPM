@@ -1,0 +1,10 @@
+<odoo>
+    <data>
+        <menuitem name="Stock balance"
+                  id="stock_balance.stock_valuation_menu"
+                  sequence="50"
+                  action="stock_balance.stock_valuation_wizard_action"
+                  groups="stock.group_stock_user"
+                  parent="stock.menu_warehouse_report"/>
+    </data>
+</odoo>

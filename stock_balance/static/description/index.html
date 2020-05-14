@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>STOCK BALANCE REPORT</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="generator" content="ActivePresenter"/>
+    <meta name="author" content="ABT"/>
+    <meta name="description" content=""/>
+    <meta name="date" content="07/11/2019"/>
+    <meta name="company" content="ABT"/>
+    <meta name="homepage" content=""/>
+    <meta http-equiv="imagetoolbar" content="no">
+    <meta name="autoincrement" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body onload="init();">
+<script type="text/javascript">
+        var slideIndex = 1;
+        function makeShowNthSlideFunction(n) {
+            return function () { currentSlide(n); };
+        }
+        function init() {
+            console.log('init');
+            var dotsContainer, slides, nSlideCount, i, dot;
+            dotsContainer = document.getElementById("dot-container");
+            slides = document.getElementsByClassName("ap-slide");
+            nSlideCount = slides.length;
+            for (i = 1; i <= nSlideCount; ++i) {
+                dot = document.createElement('span');
+                dot.className = 'dot';
+                dot.onclick = makeShowNthSlideFunction(i);
+                dotsContainer.appendChild(dot);
+            }
+            showSlides(slideIndex);
+        }
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
+        function showSlides(n) {
+            var i, slides, dots;
+            slides = document.getElementsByClassName("ap-slide");
+            dots = document.getElementsByClassName("dot");
+            if (n > slides.length) { slideIndex = 1 }
+            if (n < 1) { slideIndex = slides.length }
+            for (i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            for (i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+            slides[slideIndex - 1].style.display = "block";
+            dots[slideIndex - 1].className += " active";
+        }
+</script>
+
+<section style="max-width: 896px; margin: 0 auto;">
+    <div align="center">
+        <h1 style="color:#875A7B;">ALPHA STOCK BALANCE REPORT</h1>
+        <h3>Stock incoming, outgoing & internal transfer reports</h3>
+    </div>
+    <div align="center">
+        <p>
+            <a href="https://www.odoo.com/documentation/user/13.0/legal/licenses/licenses.html#odoo-apps">
+                <img alt="License: LGPL-3" src="https://img.shields.io/badge/license-LGPL--3-red"/>
+            </a>
+            <a href="#">
+                <img alt="VERSION" src="https://img.shields.io/badge/version-13.0.1.1-blue"/>
+            </a>
+            <a href="https://alpha-brains-technologies.com/">
+                <img alt="ALPHA BRAINS TECHNOLOGIES" src="https://img.shields.io/badge/maintainer-ABT-cyan"/>
+            </a>
+        </p>
+        <p><br></p>
+    </div>
+</section>
+<section style="margin: 0 auto; max-width: 896px;">
+    <div>
+        <h3 style="color:#875A7B;">
+            <b>Description</b>
+        </h3>
+        <p>
+            This module allows to print a stock analysis report in a specific period and with different filters:
+        </p>
+        <ul>
+            <li>By company.</li>
+            <li>By Warehouse.</li>
+            <li>By location.</li>
+            <li>By product category.</li>
+        </ul>
+        <p>
+            To get access to the <i>STOCK BALANCE REPORT</i> use the folowing menu:
+            <b>inventory/reporting/Stock Balance</b>.
+        </p>
+        <p>
+            The data is displayed on the report as a table with the flowing columns:
+        </p>
+        <table>
+            <tr>
+                <th>Beginning</th>
+                <td>The quantity of the product at the start date of the selected period</td>
+            </tr>
+            <tr>
+                <th>Received</th>
+                <td>The incoming quantity of the product within the selected period</td>
+            </tr>
+            <tr>
+                <th>Sales</th>
+                <td>The sold quantity of the product within the selected period</td>
+            </tr>
+            <tr>
+                <th>Internal</th>
+                <td>The total quantity transferred internally of the product within the selected period</td>
+            </tr>
+            <tr>
+                <th>Adjustments (+)</th>
+                <td>The quantity of the product added to the stock by using <i>Inventory Adjustment</i> within the
+                    selected period
+                </td>
+            </tr>
+            <tr>
+                <th>Adjustments (-)</th>
+                <td>The quantity of the product removed from the stock by using <i>Inventory Adjustment</i> within the
+                    selected period
+                </td>
+            </tr>
+            <tr>
+                <th>Ending</th>
+                <td>The quantity of the product at the end date of the selected period</td>
+            </tr>
+            <tr>
+                <th>Cost</th>
+                <td>The unit cost of the product at the end date of the selected period</td>
+            </tr>
+            <tr>
+                <th>Total Value</th>
+                <td>The total cost of the product at the end date of the selected period</td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <h3 style="color:#875A7B;">
+            <b>Main Features</b>
+        </h3>
+        <ul>
+            <li>Report all the stock operations history by product.</li>
+            <li>Report the stock quantities history by product.</li>
+            <li>Report the products costs history.</li>
+            <li>Display reporting summary by product category.</li>
+        </ul>
+    </div>
+    <div>
+        <h3 style="color:#875A7B;">
+            <b>Characteristics</b>
+        </h3>
+        <ul>
+            <li>Simple and easy to use.</li>
+            <li>Support multi-company mode.</li>
+            <li>Support multi-location mode.</li>
+            <li>Support multi-warehouse mode.</li>
+            <li>Maintainable code.</li>
+        </ul>
+    </div>
+    <div align="center">
+        <div>
+            <!-- slides -->
+            <div>
+                <img src="screenshot1.jpg"/>
+                <div class="ap-slide-name">1/3. Access</div>
+            </div>
+            <div>
+                <img src="screenshot2.jpg"/>
+                <div>2/3. Configuration</div>
+            </div>
+            <div>
+                <img src="banner.gif"/>
+                <div>3/3. Result</div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <h3 style="color:#875A7B;">
+            <b>Need our service?</b>
+
+        </h3>
+        <p>
+            Contact us by mail:
+            <a href="mailto:odoo.alpha.brains.tech@gmail.com">
+                odoo.alpha.brains.tech@gmail.com <i class="fa fa-envelope-o"></i>
+            </a>
+        </p>
+<!--        <p>-->
+<!--            Or on UpWork:-->
+<!--            <a href="https://www.upwork.com/o/profiles/users/_~01ad70eec260daf487/">-->
+<!--                UpWork-->
+<!--            </a>-->
+<!--        </p>-->
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="stock_balance.stock_valuation_pdf_report_template">
+            <t t-call="web.html_container">
+                <t t-call="web.internal_layout">
+                    <t t-foreach="all_companies" t-as="company">
+                        <div class="page">
+                            <h1 style="width:100%;text-align:center; padding:8px; ">
+                                Stock Balance Report
+                            </h1>
+                            <table style="border: 1px solid #656565; margin-bottom:32px; width: 100%;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border: 1px solid #656565;">
+                                            <div style="text-align: center;">
+                                                <h4>
+                                                    <b>Company</b>
+                                                </h4>
+                                                <p>
+                                                    <t t-esc="company.name"/>
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td style="border: 1px solid #656565;">
+                                            <div style="text-align: center;">
+                                                <h4>
+                                                    <b>Warehouse</b>
+                                                </h4>
+                                                <p>
+                                                    <t t-esc="warehouses"/>
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td style="border: 1px solid #656565;">
+                                            <div style="text-align: center;">
+                                                <h4>
+                                                    <b>Valuation Date</b>
+                                                </h4>
+                                                <p>
+                                                    <t t-esc="date_from"/>
+                                                    <b>To</b>
+                                                    <t t-esc="date_to"/>
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td style="border: 1px solid #656565;">
+                                            <div style="text-align: center;">
+                                                <h4>
+                                                    <b>Amount in currency</b>
+                                                </h4>
+                                                <p>
+                                                    <t t-esc="company.currency_id.name"/>
+                                                </p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr style="font-weight: bold;border-bottom: solid 2px black;">
+                                        <th/>
+                                        <th/>
+                                        <th>Beginning</th>
+                                        <th>Received</th>
+                                        <th>Sales</th>
+                                        <th>Internal</th>
+                                        <th>Adjustments (+)</th>
+                                        <th>Adjustments (-)</th>
+                                        <th>Ending</th>
+                                        <th>Cost</th>
+                                        <th>Total Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="display_only_summary == False">
+                                        <t t-set="categ_total_beginning" t-value="0"/>
+                                        <t t-set="categ_total_received" t-value="0"/>
+                                        <t t-set="categ_total_sale" t-value="0"/>
+                                        <t t-set="categ_total_internal" t-value="0"/>
+                                        <t t-set="categ_total_positive_adjustment" t-value="0"/>
+                                        <t t-set="categ_total_negative_adjustment" t-value="0"/>
+                                        <t t-set="categ_total_ending" t-value="0"/>
+                                        <t t-set="categ_total_cost" t-value="0"/>
+                                        <t t-set="categ_total_total_value" t-value="0"/>
+
+                                        <t t-foreach="all_categories" t-as="category">
+                                            <t t-if="cat_has_valuation(categs, category) == True">
+                                                <tr>
+                                                    <td>
+                                                        <span style="font-weight: bold; color: #875A7B;">
+                                                            <t t-esc="category.name"/>
+                                                        </span>
+                                                    </td>
+                                                    <td/>
+                                                    <td/>
+                                                    <td/>
+                                                    <td/>
+                                                    <td/>
+                                                    <td/>
+                                                    <td/>
+                                                    <td/>
+                                                    <td/>
+                                                    <td/>
+                                                </tr>
+
+                                                <t t-set="total_beginning" t-value="0"/>
+                                                <t t-set="total_received" t-value="0"/>
+                                                <t t-set="total_sale" t-value="0"/>
+                                                <t t-set="total_internal" t-value="0"/>
+                                                <t t-set="total_positive_adjustment" t-value="0"/>
+                                                <t t-set="total_negative_adjustment" t-value="0"/>
+                                                <t t-set="total_ending" t-value="0"/>
+                                                <t t-set="total_cost" t-value="0"/>
+                                                <t t-set="total_total_value" t-value="0"/>
+
+                                                <t t-foreach="lines" t-as="valuation">
+                                                    <t t-if="product_of_categ(valuation['product_id'], category.id) == True">
+                                                        <t t-set="total_beginning"
+                                                           t-value="total_beginning + valuation['beginning_qty']"/>
+                                                        <t t-set="total_received"
+                                                           t-value="total_received + valuation['received_qty']"/>
+                                                        <t t-set="total_sale"
+                                                           t-value="total_sale + valuation['sale_qty']"/>
+                                                        <t t-set="total_internal"
+                                                           t-value="total_internal + valuation['internal_qty']"/>
+                                                        <t t-set="total_positive_adjustment"
+                                                           t-value="total_positive_adjustment + valuation['positive_adjustment_qty']"/>
+                                                        <t t-set="total_negative_adjustment"
+                                                           t-value="total_negative_adjustment + valuation['negative_adjustment_qty']"/>
+                                                        <t t-set="total_ending"
+                                                           t-value="total_ending + valuation['ending_qty']"/>
+                                                        <t t-set="total_cost"
+                                                           t-value="total_cost + valuation['cost']"/>
+                                                        <t t-set="total_total_value"
+                                                           t-value="total_total_value + valuation['total_value']"/>
+
+                                                        <tr style="text-align:right;">
+                                                            <td>
+                                                                <t t-esc="get_product_name(valuation['product_id'])"/>
+                                                            </td>
+                                                            <td/>
+                                                            <td>
+                                                                <t t-esc="'{0:,.2f}'.format(valuation['beginning_qty'])"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="'{0:,.2f}'.format(valuation['received_qty'])"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="'{0:,.2f}'.format(valuation['sale_qty'])"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="'{0:,.2f}'.format(valuation['internal_qty'])"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="'{0:,.2f}'.format(valuation['positive_adjustment_qty'])"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="'{0:,.2f}'.format(valuation['negative_adjustment_qty'])"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="'{0:,.2f}'.format(valuation['ending_qty'])"/>
+                                                            </td>
+                                                            <td>
+                                                                <span t-esc="float('%.2f'%valuation['cost'])"
+                                                                      t-options="{'widget':'monetary', 'display_currency': company.currency_id}"/>
+                                                            </td>
+                                                            <td>
+                                                                <t t-esc="float('%.2f'%valuation['total_value'])"
+                                                                   t-options="{'widget':'monetary', 'display_currency': company.currency_id}"/>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                                <tr style="font-weight: bold; color: #875A7B;text-align:right;">
+                                                    <td/>
+                                                    <td>
+                                                        <t t-esc="category.name"/>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-esc="'{0:,.2f}'.format(total_beginning)"/>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-esc="'{0:,.2f}'.format(total_received)"/>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-esc="'{0:,.2f}'.format(total_sale)"/>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-esc="'{0:,.2f}'.format(total_internal)"/>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-esc="'{0:,.2f}'.format(total_positive_adjustment)"/>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-esc="'{0:,.2f}'.format(total_negative_adjustment)"/>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-esc="'{0:,.2f}'.format(total_ending)"/>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-esc="float('%.2f'%total_cost)"
+                                                               t-options="{'widget':'monetary', 'display_currency': company.currency_id}"/>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <span>
+                                                            <t t-esc="float('%.2f'%total_total_value)"
+                                                               t-options="{'widget':'monetary', 'display_currency': company.currency_id}"/>
+                                                        </span>
+                                                    </td>
+
+                                                    <t t-set="categ_total_beginning"
+                                                       t-value="categ_total_beginning + total_beginning"/>
+                                                    <t t-set="categ_total_received"
+                                                       t-value="categ_total_received + total_received"/>
+                                                    <t t-set="categ_total_sale"
+                                                       t-value="categ_total_sale + total_sale"/>
+                                                    <t t-set="categ_total_internal"
+                                                       t-value="categ_total_internal + total_internal"/>
+                                                    <t t-set="categ_total_positive_adjustment"
+                                                       t-value="categ_total_positive_adjustment + total_positive_adjustment"/>
+                                                    <t t-set="categ_total_negative_adjustment"
+                                                       t-value="categ_total_negative_adjustment + total_negative_adjustment"/>
+                                                    <t t-set="categ_total_ending"
+                                                       t-value="categ_total_ending + total_ending"/>
+                                                    <t t-set="categ_total_cost"
+                                                       t-value="categ_total_cost + total_cost"/>
+                                                    <t t-set="categ_total_total_value"
+                                                       t-value="categ_total_total_value + total_total_value"/>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                        <tr style="background:#C0C0C0;font-weight: bold;text-align:right;">
+                                            <td/>
+                                            <td>Total Inventory</td>
+                                            <td>
+                                                <t t-esc="'{0:,.2f}'.format(categ_total_beginning)"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="'{0:,.2f}'.format(categ_total_received)"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="'{0:,.2f}'.format(categ_total_sale)"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="'{0:,.2f}'.format(categ_total_internal)"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="'{0:,.2f}'.format(categ_total_positive_adjustment)"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="'{0:,.2f}'.format(categ_total_negative_adjustment)"/>
+                                            </td>
+                                            <td>
+                                                <t t-esc="'{0:,.2f}'.format(categ_total_ending)"/>
+                                            </td>
+                                            <td>
+                                                <t t-if="categ_total_cost"
+                                                   t-esc="float('%.2f'%categ_total_cost)"
+                                                   t-options="{'widget':'monetary', 'display_currency': company.currency_id}"/>
+                                            </td>
+                                            <td>
+                                                <t t-if="categ_total_total_value"
+                                                   t-esc="float('%.2f'%categ_total_total_value)"
+                                                   t-options="{'widget':'monetary', 'display_currency': company.currency_id}"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-foreach="all_categories" t-as="category">
+                                            <t t-if="cat_has_valuation(categs, category) == True">
+                                                <t t-set="inventory_total_beginning" t-value="0"/>
+                                                <t t-set="inventory_total_received" t-value="0"/>
+                                                <t t-set="inventory_total_sale" t-value="0"/>
+                                                <t t-set="inventory_total_internal" t-value="0"/>
+                                                <t t-set="inventory_total_positive_adjustment" t-value="0"/>
+                                                <t t-set="inventory_total_negative_adjustment" t-value="0"/>
+                                                <t t-set="inventory_total_ending" t-value="0"/>
+                                                <t t-set="inventory_total_cost" t-value="0"/>
+                                                <t t-set="inventory_total_total_value" t-value="0"/>
+                                                <t t-foreach="lines" t-as="valuation">
+                                                    <t t-if="product_of_categ(valuation['product_id'], category.id) == True">
+                                                        <t t-set="inventory_total_beginning"
+                                                           t-value="inventory_total_beginning + valuation['beginning_qty']"/>
+                                                        <t t-set="inventory_total_received"
+                                                           t-value="inventory_total_received + valuation['received_qty']"/>
+                                                        <t t-set="inventory_total_sale"
+                                                           t-value="inventory_total_sale + valuation['sale_qty']"/>
+                                                        <t t-set="inventory_total_internal"
+                                                           t-value="inventory_total_internal + valuation['internal_qty']"/>
+                                                        <t t-set="inventory_total_positive_adjustment"
+                                                           t-value="inventory_total_positive_adjustment + valuation['positive_adjustment_qty']"/>
+                                                        <t t-set="inventory_total_negative_adjustment"
+                                                           t-value="inventory_total_negative_adjustment + valuation['negative_adjustment_qty']"/>
+                                                        <t t-set="inventory_total_ending"
+                                                           t-value="inventory_total_ending + valuation['ending_qty']"/>
+                                                        <t t-set="inventory_total_cost"
+                                                           t-value="inventory_total_cost + valuation['cost']"/>
+                                                        <t t-set="inventory_total_total_value"
+                                                           t-value="inventory_total_total_value + valuation['total_value']"/>
+                                                    </t>
+                                                </t>
+                                                <tr style="text-align:right;">
+                                                    <td/>
+                                                    <td>
+                                                        <span style="font-weight: bold; color: #875A7B;">
+                                                            <t t-esc="category.name"/>
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="'{0:,.2f}'.format(inventory_total_beginning)"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="'{0:,.2f}'.format(inventory_total_received)"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="'{0:,.2f}'.format(inventory_total_sale)"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="'{0:,.2f}'.format(inventory_total_internal)"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="'{0:,.2f}'.format(inventory_total_positive_adjustment)"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="'{0:,.2f}'.format(inventory_total_negative_adjustment)"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="'{0:,.2f}'.format(inventory_total_ending)"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="float('%.2f'%inventory_total_cost)"
+                                                           t-options="{'widget':'monetary', 'display_currency': company.currency_id}"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="float('%.2f'%inventory_total_total_value)"
+                                                           t-options="{'widget':'monetary', 'display_currency': company.currency_id}"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p style="page-break-before:always;"/>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <record id="stock_balance.stock_valuation_pdf_paper_format" model="report.paperformat">
+            <field name="name">Stock Valuation PDF Paper Format</field>
+            <field name="format">A4</field>
+            <field name="default" eval="True"/>
+            <field name="orientation">Landscape</field>
+            <field name="header_line" eval="True"/>
+            <field name="header_spacing">4</field>
+            <field name="margin_top">8</field>
+            <field name="margin_left">8</field>
+            <field name="margin_right">8</field>
+            <field name="dpi">90</field>
+        </record>
+        <report
+                id="stock_balance.stock_valuation_pdf_report"
+                string="Stock Balance"
+                model="stock_balance.stock_valuation_wizard"
+                report_type="qweb-html"
+                name="stock_balance.stock_valuation_pdf_report_template"
+        />
+        <record id="stock_balance.stock_valuation_pdf_report" model="ir.actions.report">
+            <field name="paperformat_id" ref="stock_balance.stock_valuation_pdf_paper_format"/>
+        </record>
+    </data>
+</odoo>

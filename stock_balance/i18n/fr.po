@@ -1,0 +1,265 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* stock_balance
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-05 13:01+0000\n"
+"PO-Revision-Date: 2019-11-05 13:01+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "(If you do not select any categories it will take all categories)"
+msgstr ""
+"(Si vous ne sélectionnez aucune catégorie, toutes les catégories seront "
+"prises)"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid ""
+"(If you do not select any location it will take all above warehouses internal\n"
+"                                        locations)"
+msgstr ""
+"(Si vous ne sélectionnez aucun emplacement, tous les emplacements internes "
+"des entrepôts susmentionnés seront utilisés)"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "(If you do not select company it will take all companies)"
+msgstr ""
+"(Si vous ne sélectionnez pas la société, toutes les sociétés seront prises)"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "(If you do not select warehouse it will take all warehouses)"
+msgstr ""
+"(Si vous ne sélectionnez pas d'entrepôt, cela prendra tous les entrepôts)"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "<b>Amount in currency</b>"
+msgstr "<b>Montant en devise</b>"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "<b>Company</b>"
+msgstr "<b>Société</b>"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "<b>To</b>"
+msgstr "À"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "<b>Valuation Date</b>"
+msgstr "<b>Date de valorisation</b>"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "<b>Warehouse</b>"
+msgstr "<b>Entrepôt</b>"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Adjustments (+)"
+msgstr ""
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Adjustments (-)"
+msgstr ""
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Beginning"
+msgstr "Debut"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__category_ids
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Categories"
+msgstr "Categories"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__company_id
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Company"
+msgstr "Société"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Confirm"
+msgstr "Confirmer"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Cost"
+msgstr "Coût"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_report_stock_balance_stock_valuation_pdf_report_template__display_name
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__display_only_summary
+msgid "Display Only Summary?"
+msgstr "N'afficher que un résumé"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Ending"
+msgstr "Fin"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__date_from
+msgid "From Date"
+msgstr "A partir de"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_report_stock_balance_stock_valuation_pdf_report_template__id
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Internal"
+msgstr "Interne"
+
+#. module: stock_balance
+#: model:ir.actions.act_window,name:stock_balance.stock_valuation_wizard_action
+msgid "Inventory Valuation"
+msgstr "Valorisation de l'inventaire"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_report_stock_balance_stock_valuation_pdf_report_template____last_update
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard____last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Location"
+msgstr "Lieu"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__location_id
+msgid "Locations"
+msgstr "Emplacements"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Period"
+msgstr "Période"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Received"
+msgstr "Reçu"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Sales"
+msgstr "Vente"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Select Location"
+msgstr "Sélectionnez l'emplacement"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Select categories"
+msgstr "Sélectionnez les catégories"
+
+#. module: stock_balance
+#: model:ir.actions.report,name:stock_balance.stock_valuation_pdf_report
+msgid "Stock Balance"
+msgstr "Balance des stocks"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Stock Balance Report"
+msgstr "Rapport de balance des stocks"
+
+#. module: stock_balance
+#: model:ir.ui.menu,name:stock_balance.stock_valuation_menu
+msgid "Stock balance"
+msgstr "Balance des stocks"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__date_to
+msgid "To Date"
+msgstr "Jusqu'à"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Total Inventory"
+msgstr "Total inventaire"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_pdf_report_template
+msgid "Total Value"
+msgstr "Valeur totale"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Valuation"
+msgstr "Valorisation"
+
+#. module: stock_balance
+#: model:ir.model.fields,field_description:stock_balance.field_stock_balance_stock_valuation_wizard__warehouse_ids
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "Warehouses"
+msgstr "Entrepôts"
+
+#. module: stock_balance
+#: model_terms:ir.ui.view,arch_db:stock_balance.stock_valuation_abstract_form
+msgid "or"
+msgstr "ou"
+
+#. module: stock_balance
+#: model:ir.model,name:stock_balance.model_report_stock_balance_stock_valuation_pdf_report_template
+msgid "report.stock_balance.stock_valuation_pdf_report_template"
+msgstr ""
+
+#. module: stock_balance
+#: model:ir.model,name:stock_balance.model_stock_balance_stock_valuation_wizard
+msgid "stock_balance.stock_valuation_wizard"
+msgstr ""

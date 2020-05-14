@@ -1,0 +1,79 @@
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="stock_balance.stock_valuation_abstract_form">
+            <field name="name">stock_valuation list</field>
+            <field name="model">stock_balance.stock_valuation_wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Valuation">
+                            <label for="date_from" string="Period"/>
+                            <div>
+                                <field name="date_from" class="oe_inline"/>
+                                -
+                                <field name="date_to" class="oe_inline"/>
+                            </div>
+                            <field name="display_only_summary"/>
+                        </group>
+                        <group>
+                            <group string="Company" groups="base.group_multi_company">
+                                <div>
+                                    <group>
+                                        <field name="company_id"/>
+                                    </group>
+                                    <div class="o_row note">
+                                        (If you do not select company it will take all companies)
+                                    </div>
+                                </div>
+                            </group>
+                            <group string="Warehouses" groups="stock.group_stock_multi_warehouses">
+                                <div>
+                                    <group>
+                                        <field name="warehouse_ids" widget="many2many_tags"/>
+                                    </group>
+                                    <div class="o_row note">
+                                        (If you do not select warehouse it will take all warehouses)
+                                    </div>
+                                </div>
+                            </group>
+                            <group string="Location" groups="stock.group_stock_multi_locations">
+                                <div>
+                                    <group>
+                                        <field name="location_id" string="Select Location"/>
+                                    </group>
+                                    <div class="o_row note">
+                                        (If you do not select any location it will take all above warehouses internal
+                                        locations)
+                                    </div>
+                                </div>
+                            </group>
+                            <group string="Categories">
+                                <div>
+                                    <div class="o_row note">
+                                        (If you do not select any categories it will take all categories)
+                                    </div>
+                                    <group>
+                                        <field name="category_ids" widget="many2many_tags" string="Select categories"/>
+                                    </group>
+                                </div>
+                            </group>
+                        </group>
+
+                    </sheet>
+                    <footer>
+                        <button name="action_confirm" string="Confirm" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="stock_balance.stock_valuation_wizard_action">
+            <field name="name">Inventory Valuation</field>
+            <field name="res_model">stock_balance.stock_valuation_wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>
