@@ -1,0 +1,28 @@
+<odoo>
+    <record model="ir.ui.view" id="view_purchase_order_form_inherit">
+        <field name="name">view.purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_qty']" position="after">
+                <field name="weight" optional="hide"/>
+                <field name="total_weight" sum="total_weight" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_product_template_form_inherit" model="ir.ui.view">
+        <field name="name">view.product.template.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='inventory']/group/group/div//field[@name='weight']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//notebook/page/group/group/field[last()]" position="after">
+                <field name="pet"/>
+                <field name="food_type"/>
+                <field name="product_type" string="From"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
