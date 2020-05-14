@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="report.paperformat" id="paperformat_inventory_overstock_report">
+        <field name="name">paperformat.inventory.overstock.report</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_width">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">30</field>
+        <field name="margin_right">5</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">5</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+    </record>
+    
+    <report id="inventory_report"
+            model="inventory.overstock"
+            string="Inventory Overstock Report"
+            report_type="qweb-pdf"
+            name="bi_inventory_overstock_report.template_report"
+            paperformat="paperformat_inventory_overstock_report"
+            menu="False"/>
+    
+    <template id="template_report">
+         <t t-call="web.html_container">
+        <div class="header" style="border-bottom: 2px solid black">
+            <h4 class="text-center"><strong>Inventory Overstock Report</strong></h4>
+            <h5 class="text-center">
+                <span>Date :</span>
+                <t t-esc="report_date"/>
+            </h5>
+        </div>
+        <div class="article">
+            <table class="table table-condensed table-bordered" style="width: 100%">
+                <th class="text-center" style="width: 11%">Past Sale Duration : <t t-esc="past_days"/></th> 
+                <th class="text-center" style="width: 11%">Advance Stock Duration : <t t-esc="advance_days"/></th>
+                <th class="text-center" style="width: 11%">Warehouse : 
+                    <t t-foreach="ware_list" t-as="ware"> 
+                    <t t-esc="ware['name']"/>
+                    </t>
+                </th>
+            </table>
+            <table class="table table-condensed table-bordered" style="width: 100%">
+                <thead>
+                    <th class="text-center" style="width: 11%,color:gray">Product SKU</th>
+                    <th class="text-center" style="width: 11%">Current Stock</th>
+                    <th class="text-center" style="width: 11%">Incoming Stock</th>
+                    <th class="text-center" style="width: 11%">Outgoing Stock</th>
+                    <th class="text-center" style="width: 11%">Net On Hand Stock</th>
+                    <th class="text-center" style="width: 11%">Sales In Last Days</th>
+                    <th class="text-center" style="width: 11%">Average Daily Sale</th>
+                    <th class="text-center" style="width: 11%">Recent Purchase Date</th>
+                    <th class="text-center" style="width: 11%">Recent Purchase Qty</th>
+                    <th class="text-center" style="width: 11%">Recent Purchase Cost</th>
+                    <th class="text-center" style="width: 11%">Vendor Name</th>
+                    <th class="text-center" style="width: 11%">Stock Coverage</th>
+                    <th class="text-center" style="width: 11%">Expected Stock</th>
+                    <th class="text-center" style="width: 11%">Overstock Quantity</th>
+                    <th class="text-center" style="width: 11%">Overstock Value</th>
+                </thead>
+                <tbody>
+                     <t t-foreach="docs" t-as="doc">  
+                         <tr>
+                            <td>
+                                <span t-esc="doc['product_reference']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['current_stock']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['incoming_qty']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['outgoing_qty']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['on_hand_qty']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['last_sale']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['avg_daily_sale']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['recent_pur_date']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['recent_pur_qty']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['recent_pur_cost']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['vendor']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['stock_coverage']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['expected_stock']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['overstock_qty']"/>
+                            </td>
+                            <td>
+                                <span t-esc="doc['overstock_val']"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            <br/>
+            <table class="table table-condensed table-bordered" style="width: 100%">
+                <th class="text-center" style="width: 11%">Total Overstock Quantity : <t t-esc="total_overstock_qty"/></th> 
+                <th class="text-center" style="width: 11%">Total Overstock Value : <t t-esc="total_overstock_val"/></th>
+                <th class="text-center" style="width: 11%">Total Duration : <t t-esc='past_days + advance_days'/></th>
+                <th class="text-center" style="width: 11%">Number Of Warehouse : <t t-esc='total_warehouse'/></th>
+            </table>
+        </div>
+        <div class="footer">
+            <div class="row text-center" style="border-top: 1px solid black;">
+                <div class="col-xs-3 col-xs-offset-9 text-right">
+                    <ul class="list-inline" style="margin-top:10px;">
+                        <li>Page:</li>
+                        <li>
+                            <span class="page"/>
+                        </li>
+                        <li>/</li>
+                        <li>
+                            <span class="topage"/>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+       </t>
+    </template>
+</odoo>

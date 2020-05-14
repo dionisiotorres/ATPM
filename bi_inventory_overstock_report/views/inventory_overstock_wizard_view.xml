@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+
+    <record model="ir.ui.view" id="inventory_overstock_wizard_view">
+        <field name="name">inventory.overstock.report</field>
+        <field name="model">inventory.overstock</field>
+        <field name="arch" type="xml">
+            <form string="Inventory Overstock">
+                <group>
+                    <group>
+                        <field name="past_sale_dur_days"/>
+                    </group>
+                    <group>
+                        <field name="adv_stock_dur_days"/>
+                    </group>
+                </group>
+                <group>
+                    <field name="warehouse_ids" widget="many2many_tags"/>
+                    <field name="product_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                        <button name="generate_xls_report" string="Download Excel Report"
+                          type="object" default_focus="1" class="oe_highlight" />
+                         <button string="Download PDF Report" name="get_pdf_report" 
+                          type="object" class="oe_highlight"/>
+                        <button string="Cancel" special="cancel" class="btn-primary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="inventory_overstock_action">
+      <field name="name">Inventory Overstock Report</field>
+      <field name="res_model">inventory.overstock</field>
+      <field name="view_id" ref="inventory_overstock_wizard_view"/>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
+    </record>
+
+    <menuitem name="Inventory Overstock Report" id="inventory_overstock_menu" parent="stock.menu_warehouse_report" action="inventory_overstock_action"/>
+
+      <record id="view_stock_excel_report" model="ir.ui.view">
+            <field name="name">stock.excel.report</field>
+            <field name="model">stock.excel.report</field>
+            <field name="arch" type="xml">
+                <form string="Generated Excel File">
+                    <group>
+                        <field name="file_name" invisible="1"/>
+                        <field name="excel_file" readonly="1" filename="file_name"/>
+                    </group>
+                    <footer>
+                     <button string="Close" type="object" special="cancel" class="btn-primary"/>
+                 </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_stock_excel_report_action" model="ir.actions.act_window">
+            <field name="name">Inventory Overstock Report</field>
+            <field name="view_mode">form</field>
+            <field name="res_model">stock.excel.report</field>
+            <field name="target">new</field>
+        </record>     
+  </data>
+</odoo>
