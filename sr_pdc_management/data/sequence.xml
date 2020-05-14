@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="sequence_PDC_payment"
+                model="ir.sequence">
+            <field name="name">PDC Payment</field>
+            <field name="code">pdc.payment</field>
+            <field name="prefix">IN/</field>
+            <field name="suffix">/%(month)s.%(y)s</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="False" name="company_id"/>
+            <field name="padding">4</field>
+        </record>
+
+        <record id="vendor_sequence_PDC_payment"
+                model="ir.sequence">
+            <field name="name">PDC Payment for vendor</field>
+            <field name="code">pdc.payment.vendor</field>
+            <field name="prefix">OUT/</field>
+            <field name="suffix">/%(month)s.%(y)s</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="False" name="company_id"/>
+            <field name="padding">4</field>
+        </record>
+
+        <record model="ir.rule" id="pdc_payment_comp_rule">
+            <field name="name">PDC Payments multi-company</field>
+            <field name="model_id" ref="model_sr_pdc_payment"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

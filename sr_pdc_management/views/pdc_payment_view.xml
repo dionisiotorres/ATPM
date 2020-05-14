@@ -1,0 +1,335 @@
+<odoo>
+    <data>
+
+        <record id="sr_view_pdc_payment_invoice_view" model="ir.ui.view">
+            <field name="name">sr.view.pdc.payment.invoice.view</field>
+            <field name="model">sr.pdc.payment</field>
+            <field name="arch" type="xml">
+                <form string="PDC Payment">
+                    <sheet>
+                        <group>
+                            <field name="invoice_ids" invisible="1"/>
+                            <field name="state" invisible="1"/>
+                            <group>
+                                <field name="partner_id" readonly="1"/>
+                                <label for="amount"/>
+                                <div name="amount_div" class="o_row">
+                                    <field name="amount"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}"
+                                           groups="base.group_multi_currency" readonly="1"/>
+                                </div>
+                                <field name="cheque_ref" required="1"/>
+                                <field name="journal_id" widget="selection"/>
+                                <field name="employee_id"/>
+                                <field name="receipt_no"/>
+                            </group>
+                            <group>
+                                <field name="payment_date"/>
+                                <field name="due_date"/>
+                                <field name="communication" widget="many2many_tags"/>
+                                <field name="agent"/>
+                                <field name="bank" required="1"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string='Register PDC Cheque' name="register" type="object" context="{'pdc':1}"
+                                class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_pdc_payment"
+                model="ir.actions.act_window">
+            <field name="name">PDC Payment</field>
+            <field name="res_model">sr.pdc.payment</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="sr_view_pdc_payment_invoice_view"/>
+            <field name="context">{'default_invoice_ids': [(4, active_id, None)]}
+            </field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="sr_pdc_payment_tree" model="ir.ui.view">
+            <field name="name">sr.pdc.payment.tree</field>
+            <field name="model">sr.pdc.payment</field>
+            <field name="arch" type="xml">
+                <tree decoration-info="state=='draft'" decoration-muted="state=='reconciled'" edit="false">
+                    <field name="payment_date" optional="show"/>
+                    <field name="journal_id" optional="show"/>
+                    <field name="partner_id" optional="show"/>
+                    <field name="payment_type" optional="show"/>
+                    <field name="amount" sum="Amount" optional="show"/>
+                    <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                    <field name="state" optional="show"/>
+                    <field name="currency_id" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="sr_pdc_payment_form" model="ir.ui.view">
+            <field name="name">sr.pdc.payment.form</field>
+            <field name="model">sr.pdc.payment</field>
+            <field name="arch" type="xml">
+                <form string="PDC Payment">
+                    <header>
+                        <!--                       <button name="pdc_payment" class="oe_highlight" states="draft" string="Confirm" type="object"/> -->
+                        <!--                           <button name="collect_cash" class="oe_highlight" states="posted" string="Collect Cash" type="object"/> -->
+                        <!--                           <button name="refuse" class="oe_highlight" states="posted" string="Refuse" type="object" /> -->
+                        <button name="register" class="oe_highlight" states="draft" string="Register" type="object"/>
+                        <button name="return_cheque" class="oe_highlight" states="register" string="Return"
+                                type="object"/>
+                        <button name="deposit" class="oe_highlight" states="register,return,bounce" string="Deposit"
+                                type="object"/>
+                        <button name="done" class="oe_highlight" states="deposit" string="Done" type="object"/>
+                        <button name="cancel" class="oe_highlight" states="register,bounce,return" string="Cancel"
+                                type="object"/>
+                        <button name="bounce" class="oe_highlight" states="deposit" string="Bounce" type="object"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="draft,register,bounce,return,deposit,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" name="attachment_on_account_cheque" type="object"
+                                    icon="fa-cloud-upload" attrs="{'invisible': [('attachment_count', '=', 0)]}">
+                                <field name="attachment_count" widget="statinfo" string="Attachment"/>
+                            </button>
+                            <button type="object" name="action_view_jornal_items" class="oe_stat_button" icon="fa-bars"
+                                    attrs="{'invisible': [('journal_items_count', '=', 0)]}">
+                                <field name="journal_items_count" widget="statinfo" string="Journal Items"/>
+                            </button>
+                            <button type="object" name="action_view_jornal_entry" class="oe_stat_button" icon="fa-bars"
+                                    attrs="{'invisible': [('journal_entry_count', '=', 0)]}">
+                                <field name="journal_entry_count" widget="statinfo" string="Journal Entry"/>
+                            </button>
+                        </div>
+
+                        <group>
+                            <field name="invoice_ids" invisible="1"/>
+                            <group>
+                                <field name="name" readonly="1"/>
+                                <field name="payment_type" widget="radio"
+                                       attrs="{'readonly': [('state', 'not in', ['return','bounce','draft'])] }"/>
+                                <field name="partner_id"
+                                       domain="['|',('customer_rank', '>', 0), ('supplier_rank', '>', 0)]"
+                                       attrs="{'readonly': [('state', 'not in', ['return','bounce','draft'])] }"/>
+                                <label for="amount"/>
+                                <div name="amount_div" class="o_row">
+                                    <field name="amount"
+                                           attrs="{'readonly': [('state', 'not in', ['return','register','bounce','draft'])] }"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}"
+                                           groups="base.group_multi_currency"
+                                           attrs="{'readonly': [('state', 'not in', ['return','bounce','draft'])] }"/>
+                                    <field name="supplier_rank" invisible="1"/>
+                                    <field name="customer_rank" invisible="1"/>
+                                </div>
+                                <!--<field name="cheque_ref" attrs="{'readonly': [('state', 'not in', ['return','bounce','draft'])] }"/>-->
+                                <!--Muhammad Jawaid Iqbal-->
+                                <field name="cheque_ref" required="True"/>
+                                <field name="journal_id" widget="selection"
+                                       attrs="{'readonly': [('state', 'not in', ['return','bounce','draft','register'])] }"/>
+                                <field name="receipt_no" options="{'type':'number','step':1}"/>
+                                <field name="customer_pdc_payment_account"
+                                       domain="[('company_id','=',company_id),('is_pdc_account','=',True)]"
+                                       attrs="{'invisible':[('customer_rank','=',0)]}"/>
+                            </group>
+                            <group>
+                                <field name="payment_date" readonly="1"/>
+                                <field name="due_date"
+                                       attrs="{'readonly': [('state', 'not in', ['return','register','bounce','draft'])] }"/>
+                                <field name="communication" widget="many2many_tags"
+                                       attrs="{'readonly': [('state', 'not in', ['return','bounce','draft'])] }"/>
+                                <field name="agent"
+                                       attrs="{'readonly': [('state', 'not in', ['return','bounce','draft'])] }"/>
+                                <!--<field name="bank" attrs="{'readonly': [('state', 'not in', ['return','bounce','draft'])] }"/>-->
+                                <field name="bank" required="True"/>
+                                <field name="employee_id"/>
+                                <!--                                6/4/2020 JIQ-->
+                                <!--                                <field name="company_id" groups="base.group_multi_company"-->
+                                <!--                                       attrs="{'readonly': [('state', 'not in', ['return','bounce','draft'])] }"/>-->
+                                <field name="company_id" options="{'no_create':True}"
+                                       groups="base.group_multi_company"/>
+                                <field name="vendor_pdc_payment_account"
+                                       domain="[('company_id','=',company_id),('is_pdc_account','=',True)]"
+                                       attrs="{'invisible':[('supplier_rank','=',0)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Attachments">
+                                <field name="attchment_ids" context="{'default_payment_id':active_id}">
+                                    <tree>
+                                        <field name="name" optional="show"/>
+                                        <field name="type" optional="show"/>
+                                        <field name="company_id" optional="show"/>
+                                        <field name="create_uid" optional="show"/>
+                                        <field name="create_date" optional="show"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="sr_pdc_payment_pivot" model="ir.ui.view">
+            <field name="name">sr.pdc.payment.pivot</field>
+            <field name="model">sr.pdc.payment</field>
+            <field name="arch" type="xml">
+                <pivot>
+                    <field name="name"/>
+                    <field name="payment_type"/>
+                    <field name="partner_id"/>
+                    <field name="amount"/>
+                    <field name="cheque_ref"/>
+                    <field name="journal_id"/>
+                    <field name="receipt_no"/>
+                    <field name="payment_date"/>
+                    <field name="due_date"/>
+                    <field name="communication"/>
+                    <field name="agent"/>
+                    <field name="bank"/>
+                    <field name="employee_id"/>
+                    <field name="company_id"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="view_sr_pdc_payment_search" model="ir.ui.view">
+            <field name="name">view.sr.pdc.payment.search</field>
+            <field name="model">sr.pdc.payment</field>
+            <field name="arch" type="xml">
+                <search>
+                    <filter name="draft" string="Draft" domain="[('state','=','draft')]"/>
+                    <filter name="register" string="Registered" domain="[('state','=','register')]"/>
+                    <filter name="return" string="Returned" domain="[('state','=','return')]"/>
+
+                    <filter name="deposit" string="Deposited" domain="[('state','=','deposit')]"/>
+                    <filter name="bounce" string="Bounced" domain="[('state','=','bounce')]"/>
+                    <filter name="done" string="Done" domain="[('state','=','done')]"/>
+                    <filter name="cancel" string="Cancelled" domain="[('state','=','cancel')]"/>
+                    <separator/>
+                    <filter name="receive_money" string="Receive Money" domain="[('payment_type','=','inbound')]"/>
+                    <filter name="send_money" string="Send Money" domain="[('payment_type','=','outbound')]"/>
+                    <separator/>
+                    <filter name="today" string="Today Payment Date"
+                            domain="[('payment_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('payment_date', '&lt;=', datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter name="yesterday" string='Yesterday Payment Date'
+                            domain="[('payment_date', '&gt;=', (datetime.date.today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')),('payment_date', '&lt;=', ((datetime.date.today())-datetime.timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter name="current_week" string='This Week Payment Date'
+                            domain="[('payment_date','&lt;=',(datetime.date.today()+relativedelta(days=7)-relativedelta(days=1)).strftime('%Y-%m-%d 23:59:59')),('payment_date','&gt;=',(datetime.date.today() - relativedelta(days=datetime.date.today().weekday())).strftime('%Y-%m-%d 00:00:00'))]"/>
+                    <filter name="current_month" string='This Month Payment Date'
+                            domain="[('payment_date','&gt;=',datetime.date.today().strftime('%Y-%m-01 00:00:00')),('payment_date','&lt;=',(datetime.date.today()+relativedelta(months=1,day=1,days=-1)).strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <!--                    JIQ 2-->
+                    <separator/>
+                    <filter name="today_dd" string="Today Due Date"
+                            domain="[('due_date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00')),('due_date', '&lt;=', datetime.datetime.now().strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter name="tomorrow_dd" string='Tomorrow Due Date'
+                            domain="[('due_date', '&gt;=', (datetime.date.today()+datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')),('due_date', '&lt;=', ((datetime.date.today())+datetime.timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter name="yesterday_dd" string='Yesterday Due Date'
+                            domain="[('due_date', '&gt;=', (datetime.date.today()-datetime.timedelta(days=1)).strftime('%Y-%m-%d 00:00:00')),('due_date', '&lt;=', ((datetime.date.today())-datetime.timedelta(days=1)).strftime('%Y-%m-%d 23:59:59'))]"/>
+                    <filter name="current_week_dd" string='This Week Due Date'
+                            domain="[('due_date','&lt;=',(datetime.date.today()+relativedelta(days=7)-relativedelta(days=1)).strftime('%Y-%m-%d 23:59:59')),('due_date','&gt;=',(datetime.date.today() - relativedelta(days=datetime.date.today().weekday())).strftime('%Y-%m-%d 00:00:00'))]"/>
+                    <filter name="current_month_dd" string='This Month Due Date'
+                            domain="[('due_date','&gt;=',datetime.date.today().strftime('%Y-%m-01 00:00:00')),('due_date','&lt;=',(datetime.date.today()+relativedelta(months=1,day=1,days=-1)).strftime('%Y-%m-%d 23:59:59'))]"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_pdc_payment_main" model="ir.actions.act_window">
+            <field name="name">PDC Payments</field>
+            <field name="res_model">sr.pdc.payment</field>
+            <!-- <field name="view_type">form</field> -->
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="context">{}</field>
+            <field name="domain">[]</field>
+            <field name="view_id" ref="sr_pdc_payment_tree"/>
+            <field name="search_view_id" ref="view_sr_pdc_payment_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Register a Post Dated Check
+                </p>
+            </field>
+        </record>
+
+        <record id="bulk_cheque_deposit_view_form" model="ir.ui.view">
+            <field name="name">bulk.cheque.deposit.view.form</field>
+            <field name="model">bulk.cheque.deposit</field>
+            <field name="arch" type="xml">
+                <form>
+                    <p>Are you sure want deposit Cheques</p>
+                    <footer>
+                        <button name="cheque_button_deposit" type="object" string="Deposit Cheque"
+                                class="oe_highlight"/>
+                        or
+                        <button string="Cancel" special="cancel" class="oe_link"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_account_form_inherit" model="ir.ui.view">
+            <field name="name">view.account.account.form.inherit</field>
+            <field name="model">account.account</field>
+            <field name="inherit_id" ref="account.view_account_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group/group/field[last()]" position="after">
+                    <field name="is_pdc_account"/>
+                </xpath>
+            </field>
+        </record>
+
+        <act_window id="action_bulk_deposit_cheque"
+                    name="Deposit Cheque"
+                    res_model="bulk.cheque.deposit"
+                    binding_model="sr.pdc.payment"
+                    view_id="bulk_cheque_deposit_view_form"
+                    target="new"
+        />
+
+        <record id="view_pdc_report_form" model="ir.ui.view">
+            <field name="name">pdc.report.wizard.view.form</field>
+            <field name="model">pdc.report.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group col="4">
+                        <field name="from_date" required="1"/>
+                        <field name="to_date" required="1"/>
+                        <field name="state"/>
+                        <field name="partner_type" attrs="{'invisible':[('payment_type','!=',False)]}"/>
+                        <field name="partner_ids" widget="many2many_tags"/>
+                        <field name="payment_type" attrs="{'invisible':[('partner_type','!=',False)]}"/>
+                    </group>
+                    <footer>
+                        <button name="generate_report" type="object" string="Print" class="oe_highlight"/>
+                        OR
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_pdc_report" model="ir.actions.act_window">
+            <field name="name">PDC Report</field>
+            <field name="res_model">pdc.report.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem id="menu_finance_pdc" name="Post Dated Cheques" parent="account.menu_finance_entries"
+                  sequence="4"/>
+        <menuitem parent="account.menu_finance_reports" id="menu_pdc_report" name="PDC report"
+                  action="action_pdc_report"/>
+        <menuitem action="action_pdc_payment_main" id="menu_pdc_payment" parent="menu_finance_pdc"/>
+    </data>
+</odoo>

@@ -1,0 +1,40 @@
+<odoo>
+<record id="res_config_settings_view_form_extends_add_account_field" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.extends.add.account.field</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@data-key='account']" position="inside">
+                        <h2>PDC Management</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-12 col-lg-6 o_setting_box" title="These accounts are set in any new PDC payment entry created.">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">PDC Account For Customers</span>
+                                    <div class="text-muted">
+                                        Default account applied to PDC payment Entries
+                                    </div>
+                                    <div class="text-muted">
+                                            <field name="customer_pdc_payment_account"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 o_setting_box" title="These accounts are set in any new PDC payment entry created.">
+                                <div class="o_setting_left_pane"/>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">PDC Account for Vendors/Suppliers</span>
+                                    <div class="text-muted">
+                                        Default Account Applied to PDC Payment Entries for Suppliers
+                                    </div>
+                                    <div class="text-muted">
+                                            <field name="vendor_pdc_payment_account"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                </xpath>
+            </field>
+        </record>
+</odoo>
