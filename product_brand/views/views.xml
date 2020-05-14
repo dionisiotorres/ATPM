@@ -11,5 +11,14 @@
                 </field>
             </field>
         </record>
+
+        <record id="action_product_brand" model="ir.actions.act_window">
+            <field name="name">Brand</field>
+            <field name="res_model">product.brand</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="menu_product_brand" name="Product Brand" action="action_product_brand"
+                  parent="stock.menu_stock_inventory_control" sequence="3"/>
     </data>
 </odoo>
