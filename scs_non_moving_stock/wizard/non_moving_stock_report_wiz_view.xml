@@ -1,0 +1,37 @@
+<odoo>
+    <!-- non.moving.stock.report form view -->
+    <record id="wiz_non_moving_stock_form" model="ir.ui.view">
+        <field name="name">wiz.non.moving.stock.form</field>
+        <field name="model">non.moving.stock</field>
+        <field name="arch" type="xml">
+            <form string="Non Moving Stock">
+                <group string="Non Moving Stock Report" col="4">
+                    <field name="form_date"/>
+                    <field name="to_date"/>
+                </group>
+                <footer>
+                    <button name="print_report" type="object"
+                            class="oe_highlight"
+                            string="Submit"/>
+                    <button string="Cancel" class="btn-default"
+                            special="cancel"
+                            icon="fa-close"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!--action of non.moving.stock -->
+    <record id="action_non_moving_stock_report" model="ir.actions.act_window">
+        <field name="name">Non Moving Stock Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">non.moving.stock</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="non_moving_stock_menu"
+              name="Non Moving Stock"
+              action="action_non_moving_stock_report"
+              parent="stock.menu_warehouse_report"/>
+</odoo>

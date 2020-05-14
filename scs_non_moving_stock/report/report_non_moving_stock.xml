@@ -1,0 +1,8 @@
+<odoo>
+    <report id="report_non_moving_stock"
+            string="Non Moving Stock"
+            model="non.moving.stock"
+            report_type="qweb-pdf"
+            name="scs_non_moving_stock.templates_non_moving_stock"
+            file="scs_non_moving_stock.templates_non_moving_stock"/>
+</odoo>

@@ -1,0 +1,154 @@
+<odoo>
+    <template id="templates_non_moving_stock">
+        <t t-call="web.html_container">
+            <t t-set="data_report_margin_top" t-value="60"/>
+            <t t-set="data_report_header_spacing" t-value="55"/>
+            <t t-call="web.external_layout">
+                <t t-set="value_index" t-value="0"/>
+                <div class="page">
+                    <style type="text/css">
+                        .border {
+                        border: 1px solid black;
+                        }
+                        .center {
+                        text-align:center;
+                        }
+                    </style>
+                    <h4 style="text-align:center;">
+                        <b>
+                            <u>Non Moving Stock</u>
+                        </b>
+                    </h4>
+                    <strong>Form Date:
+                        <span t-esc="docs.form_date"/>
+                    </strong>
+                    <br/>
+                    <strong>To Date:
+                        <span t-esc="docs.to_date"/>
+                    </strong>
+                    <br/>
+                    <br/>
+                    <div class="row">
+                        <t t-set="total_stock_valuation" t-value="0"/>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th class="border center"
+                                        style="width: 5px">Sr.
+                                    </th>
+                                    <th class="border center"
+                                        style="width: 20%">Product Name
+                                    </th>
+                                    <th class="border center">Product Code</th>
+                                    <th class="border center">On hand Qty</th>
+                                    <th class="border center"
+                                        style="width: 10px">Forecasted Qty
+                                    </th>
+                                    <th class="border center">Stock Valuation
+                                    </th>
+                                    <th class="border center">UOM</th>
+                                    <th class="border center"
+                                        style="width: 100px">Last
+                                        Sales
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="get_non_moving_stock(docs)"
+                                   t-as="o">
+                                    <tr class="border-black">
+                                        <td class="border"
+                                            style="text-align:right;">
+                                            <span t-esc="o_index + 1"/>
+                                        </td>
+                                        <td class="border">
+                                            <span t-esc="o.name"/>
+                                        </td>
+                                        <td class="border">
+                                            <span t-esc="o.default_code"/>
+                                        </td>
+
+                                        <td class="border"
+                                            style="text-align:right;">
+                                            <strong>
+                                                <span t-esc="o.qty_available"/>
+                                            </strong>
+                                        </td>
+                                        <td class="border"
+                                            style="text-align:right;">
+                                            <span t-esc="o.virtual_available"/>
+                                        </td>
+                                        <td class="border"
+                                            style="text-align:right;">
+                                            <strong>
+                                                <span t-esc="o.standard_price * o.qty_available"/>
+                                                <t t-set="total_stock_valuation"
+                                                   t-value="total_stock_valuation + (o.standard_price * o.qty_available)"/>
+                                            </strong>
+                                        </td>
+                                        <td class="border"
+                                            style="text-align:center;">
+                                            <span t-esc="o.uom_id.name"/>
+                                        </td>
+                                        <td class="border">
+                                            <span t-esc="get_last_sale_date(o)"/>
+                                        </td>
+                                    </tr>
+                                    <t t-foreach="get_warehouse(o)" t-as="wh">
+                                        <t t-if="wh">
+                                            <tr class="border-black">
+                                                <td class="border">
+                                                </td>
+                                                <td colspan="2" class="border"
+                                                    style="text-align:center;">
+                                                    <t t-if="wh.get('wh')">
+                                                        <span t-esc="wh.get('wh')"/>
+                                                    </t>
+                                                    <t t-if="not wh.get('wh')">
+                                                        <span t-esc="wh.get('st_qu')"/>
+                                                    </t>
+                                                </td>
+                                                <td class="border"
+                                                    style="text-align:right;">
+                                                    <span t-esc="wh.get('qty')"/>
+                                                </td>
+                                                <td class="border"
+                                                    style="text-align:right;">
+                                                    <p>0.0</p>
+                                                </td>
+                                                <td class="border"
+                                                    style="text-align:right;">
+                                                    <span t-esc="wh.get('valuation')"/>
+                                                </td>
+                                                <td class="border"
+                                                    style="text-align:center;">
+                                                    <span t-esc="o.uom_id.name"/>
+                                                </td>
+                                                <td class="border">
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                </t>
+                                <tr>
+                                    <td class="border"
+                                        style="text-align:right;" colspan="5">
+                                        <strong>Total Stock Valuation:</strong>
+                                    </td>
+                                    <td class="border"
+                                        style="text-align:right;">
+                                        <strong>
+                                            <t t-esc="total_stock_valuation"/>
+                                        </strong>
+                                    </td>
+                                    <td colspan="2" class="border">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
